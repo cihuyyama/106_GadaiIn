@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "209141533208",
+    "project_id": "pamlanjut",
+    "storage_bucket": "pamlanjut.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209141533208:android:3d396c15f4a43c79a1916d",
+        "android_client_info": {
+          "package_name": "com.example.fb1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4puska18pML04XMCTfDQesUXsMJdxpEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209141533208:android:78c3c1b9f105b87aa1916d",
+        "android_client_info": {
+          "package_name": "com.example.gadain"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4puska18pML04XMCTfDQesUXsMJdxpEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
