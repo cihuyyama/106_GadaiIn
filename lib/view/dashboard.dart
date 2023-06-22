@@ -4,7 +4,7 @@ import 'package:gadain/widget/progress.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final usersRef = FirebaseFirestore.instance.collection('users');
+final 
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,46 +18,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    getUsers();
-    // updateUser();
-    // createUser();
-    deleteUser();
-    // getUsersbyid();
     super.initState();
-  }
-
-  void createUser() async {
-    await usersRef
-        .doc("hjsdfhj")
-        .set({"username": "muhammad", "isAdmin": false});
-  }
-
-  void updateUser() {
-    usersRef
-        .doc("hjsdfhj")
-        .update({"username": "ahmed", "isAdmin": false});
-  }
-
-  void deleteUser() {
-    usersRef
-        .doc("hjsdfhj")
-        .delete();
-  }
-
-  getUsersbyid() async {
-    final String id = "TiLqIxhG8VJ9jJcIeUtg";
-    final DocumentSnapshot doc = await usersRef.doc(id).get();
-    print(doc.data());
-    print(doc.id);
-  }
-
-  getUsers() async {
-    final QuerySnapshot snapshot = await usersRef.get();
-    users = snapshot.docs;
-    // snapshot.docs.forEach((DocumentSnapshot doc) {
-    //   print(doc.data());
-    //   print(doc.id);
-    // });
   }
 
   @override
@@ -65,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
         appBar: header(context, isApptitle: true, titleText: "Dashboard"),
         body: StreamBuilder<QuerySnapshot>(
-          stream: usersRef.snapshots(),
+          // stream: usersRef.snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgress();

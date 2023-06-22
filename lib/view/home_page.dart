@@ -1,14 +1,23 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gadain/model/user.dart' as usermod;
 import 'package:gadain/view/activity_page.dart';
 import 'package:gadain/view/cashflow_page.dart';
+import 'package:gadain/view/create_account.dart';
 import 'package:gadain/view/dashboard.dart';
 import 'package:gadain/view/profile_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:gadain/controller/auth_Controller.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final usersRef = FirebaseFirestore.instance.collection('users');
+final AuthController authController = AuthController();
+final timestamp = DateTime.now();
+usermod.User? currentUser;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,7 +38,7 @@ class _HomePageState extends State<HomePage> {
 
     googleSignIn.onCurrentUserChanged.listen((account) {
       if (account != null) {
-        print("Account detected : $account");
+        createUserInFirestore();
         setState(() {
           isAuth = true;
         });
@@ -45,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     googleSignIn.signInSilently(suppressErrors: false).then(
       (account) {
         if (account != null) {
-          print("Account detected : $account");
+          createUserInFirestore();
           setState(() {
             isAuth = true;
           });
@@ -58,6 +67,32 @@ class _HomePageState extends State<HomePage> {
     ).catchError((r) {
       print(r);
     });
+  }
+
+  createUserInFirestore() async {
+    //check if exist
+    final GoogleSignInAccount? user = googleSignIn.currentUser;
+    DocumentSnapshot doc = await usersRef.doc(user?.id).get();
+
+    if (!doc.exists) {
+      final username = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CreateAccount(),
+          ));
+      usersRef.doc(user!.id).set({
+        "id": user.id,
+        "username": username,
+        "email": user.email,
+        "displayName": user.displayName,
+        "bio": "",
+        "timestamp": timestamp
+      });
+      doc = await usersRef.doc(user.id).get();
+    }
+    currentUser = usermod.User.fromDocument(doc);
+    print(currentUser);
+    print(currentUser?.username);
   }
 
   @override
@@ -81,11 +116,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onTap(int pageIndex) {
-    pageController.animateToPage(
-      pageIndex,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut
-    );
+    pageController.animateToPage(pageIndex,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   Scaffold buildAuthScreen() {
@@ -95,7 +127,8 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          Dashboard(),
+          // Dashboard(),
+          TextButton(onPressed: logout, child: Text('Logout')),
           ActivityPage(),
           CashFlowPage(),
           ProfilePage(),
