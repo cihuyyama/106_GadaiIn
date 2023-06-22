@@ -31,6 +31,17 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
+    // lintOptions {
+    //     // ...
+    //     checkReleaseBuilds false
+    //     warningsAsErrors true
+    //     disable 'InvalidPackage'
+    //     lintConfig file("lint.xml")
+    //     // lintChecks = ["UnusedResources"]
+    //     // Add the following line
+    //     // lintOptions.additionalCheck = 'unchecked'
+    // }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

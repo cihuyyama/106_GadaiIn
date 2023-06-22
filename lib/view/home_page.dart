@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -12,13 +15,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isAuth = false;
+  PageController pageController = PageController();
+  int pageIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    pageController = PageController();
+
     googleSignIn.onCurrentUserChanged.listen((account) {
     if (account != null) {
-      print("Account detected");
+      print("Account detected : $account");
       setState(() {
         isAuth = true;
       });
@@ -34,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     googleSignIn.signInSilently(suppressErrors: false).then(
       (account) {
         if (account != null) {
-      print("Account detected");
+      print("Account detected : $account");
       setState(() {
         isAuth = true;
       });
@@ -49,6 +56,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void dispose(){
+    pageController.dispose();
+    super.dispose();
+  }
+
+
 
   Future<void> login() async {
     await googleSignIn.signIn();
@@ -58,11 +72,47 @@ class _HomePageState extends State<HomePage> {
     await googleSignIn.signOut();
   }
 
-  Widget buildAuthScreen() {
-    return TextButton(
-      onPressed: logout,
-      child: Text('Logout'),
+  onPageChanged(int pageIndex){
+    setState(() {
+      this.pageIndex = pageIndex;
+    });
+  }
+
+  onTap(int pageIndex){
+    pageController.jumpToPage(
+      pageIndex,
     );
+  }
+
+  Scaffold buildAuthScreen() {
+    return Scaffold(
+      body: PageView(
+        children: <Widget>[
+          // Timeline(),
+          // ActivityFeed(),
+          // Upload(),
+          // Search(),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColor,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard)),
+          BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+          BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+          BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+        ],
+      ),
+    );
+    // return TextButton(
+    //   onPressed: logout,
+    //   child: Text('Logout'),
+    // );
   }
 
   Scaffold buildUnAuthScreen() {
