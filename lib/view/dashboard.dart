@@ -19,10 +19,11 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     getUsers();
-    updateUser();
+    // updateUser();
     // createUser();
-    super.initState();
+    deleteUser();
     // getUsersbyid();
+    super.initState();
   }
 
   void createUser() async {
@@ -31,8 +32,16 @@ class _DashboardState extends State<Dashboard> {
         .set({"username": "muhammad", "isAdmin": false});
   }
 
-  void updateUser(){
-    usersRef.doc("hjsdfhj").update({"username": "ahmed", "isAdmin": false});
+  void updateUser() {
+    usersRef
+        .doc("hjsdfhj")
+        .update({"username": "ahmed", "isAdmin": false});
+  }
+
+  void deleteUser() {
+    usersRef
+        .doc("hjsdfhj")
+        .delete();
   }
 
   getUsersbyid() async {
