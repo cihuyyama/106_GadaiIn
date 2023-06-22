@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widget/header.dart';
+
 class CashFlowPage extends StatefulWidget {
   const CashFlowPage({super.key});
 
@@ -10,6 +12,8 @@ class CashFlowPage extends StatefulWidget {
 class _CashFlowPageState extends State<CashFlowPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: header(context, titleText: "Cashflow"),
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'package:gadain/widget/progress.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final 
+final usersRef = FirebaseFirestore.instance.collection('users');
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -26,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
         appBar: header(context, isApptitle: true, titleText: "Dashboard"),
         body: StreamBuilder<QuerySnapshot>(
-          // stream: usersRef.snapshots(),
+          stream: usersRef.snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgress();

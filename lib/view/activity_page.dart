@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widget/header.dart';
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
 
@@ -10,6 +12,8 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: header(context, titleText: "Activity"),
+    );
   }
 }
