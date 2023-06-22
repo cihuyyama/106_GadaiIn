@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gadain/widget/header.dart';
+import 'package:gadain/widget/progress.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -7,8 +8,8 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context),
-      body: Text('Dashboard'),
+      appBar: header(context, isApptitle: true, titleText: "Dashboard"),
+      body: CircularProgress(),
     );
   }
 }
