@@ -19,8 +19,15 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     getUsers();
+    createUser();
     super.initState();
     // getUsersbyid();
+  }
+
+  void createUser() async {
+    await usersRef
+        .doc("hjsdfhj")
+        .set({"username": "muhammad", "isAdmin": false});
   }
 
   getUsersbyid() async {
@@ -49,8 +56,9 @@ class _DashboardState extends State<Dashboard> {
             if (!snapshot.hasData) {
               return CircularProgress();
             }
-            final List<Text> children =
-                snapshot.data!.docs.map((doc) => Text(doc['username'])).toList();
+            final List<Text> children = snapshot.data!.docs
+                .map((doc) => Text(doc['username']))
+                .toList();
             return Container(
               child: ListView(
                 children: children,
