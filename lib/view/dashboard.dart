@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gadain/widget/header.dart';
 import 'package:gadain/widget/progress.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('users');

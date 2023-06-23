@@ -1,16 +1,29 @@
-# gadain
+# GadaiIn
 
-A new Flutter project.
+## Table of Contents
 
-## Getting Started
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [flowchart](#Flowchart)
+- [Use-case](#Use-Case)
 
-This project is a starting point for a Flutter application.
+## Project Overview
 
-A few resources to get you started if this is your first Flutter project:
+Aplikasi yang digunakan untuk mencatat penggadaian barang oleh pelaku usaha penggadaian serta memiliki cashflow uang dari setiap barang yang digadai sesuai dengan jatuh tempo waktu yang diambil.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+-login admin (auth)
+-Balance uang kas untuk penggadaian
+-cashflow uang setiap aktivitas penggadaian
+-add penggadaian barang(barang, NIK penggadai, nama penggadai,jumlah harga gadai barang, jatuh tempo, persenan bunga(sesuai jatuh tempo yang diambil),  )
+-laporan bulanan penggadaian
+-status penggadaian
+
+## Flowchart
+
+![GadaiIn Flowchart](assets/images/GadaiIn_Flowchart.png)
+
+## Use Case
+
+![GadaiIn UseCase](assets/images/GadaiIn_UseCase.png)
