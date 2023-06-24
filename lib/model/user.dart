@@ -9,12 +9,14 @@ class User {
   final String email;
   final String bio;
   final String displayName;
+  final String photoUrl;
   User({
     required this.id,
     required this.username,
     required this.email,
     required this.bio,
     required this.displayName,
+    required this.photoUrl,
   });
 
   factory User.fromDocument(DocumentSnapshot doc){
@@ -24,6 +26,7 @@ class User {
       username: doc['username'],
       displayName: doc['displayName'],
       bio: doc['bio'],
+      photoUrl: doc['photoUrl']
     );
   }
 
@@ -35,6 +38,7 @@ class User {
     String? email,
     String? bio,
     String? displayName,
+    String? photoUrl,
   }) {
     return User(
       id: id ?? this.id,
@@ -42,6 +46,7 @@ class User {
       email: email ?? this.email,
       bio: bio ?? this.bio,
       displayName: displayName ?? this.displayName,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 
@@ -52,6 +57,7 @@ class User {
       'email': email,
       'bio': bio,
       'displayName': displayName,
+      'photoUrl': photoUrl,
     };
   }
 
@@ -62,6 +68,7 @@ class User {
       email: map['email'] as String,
       bio: map['bio'] as String,
       displayName: map['displayName'] as String,
+      photoUrl: map['photoUrl'] as String,
     );
   }
 
@@ -72,7 +79,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, username: $username, email: $email, bio: $bio, displayName: $displayName)';
+    return 'User(id: $id, username: $username, email: $email, bio: $bio, displayName: $displayName, photoUrl: $photoUrl)';
   }
 
   @override
@@ -84,7 +91,8 @@ class User {
       other.username == username &&
       other.email == email &&
       other.bio == bio &&
-      other.displayName == displayName;
+      other.displayName == displayName &&
+      other.photoUrl == photoUrl;
   }
 
   @override
@@ -93,6 +101,7 @@ class User {
       username.hashCode ^
       email.hashCode ^
       bio.hashCode ^
-      displayName.hashCode;
+      displayName.hashCode ^
+      photoUrl.hashCode;
   }
 }

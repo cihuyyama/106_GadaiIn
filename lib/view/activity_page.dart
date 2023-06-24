@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gadain/view/dashboard.dart';
@@ -29,7 +27,7 @@ class _ActivityPageState extends State<ActivityPage> {
     });
   }
 
-  clearSearch(){
+  clearSearch() {
     searchController.clear();
   }
 
@@ -80,6 +78,24 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
+  viewData() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: usersRef.snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return buildNoContent();
+        }
+        List<Result> searchResult = [];
+        snapshot.data?.docs.forEach((doc) {
+          usermod.User user = usermod.User.fromDocument(doc);
+          Result result = Result(user);
+          searchResult.add(result);
+        });
+        return ListView(children: searchResult);
+      },
+    );
+  }
+
   buildSearchResult() {
     return FutureBuilder(
         future: searchResultFuture,
@@ -93,9 +109,7 @@ class _ActivityPageState extends State<ActivityPage> {
             Result result = Result(user);
             searchResult.add(result);
           });
-          return ListView(
-            children: searchResult
-          );
+          return ListView(children: searchResult);
         });
   }
 
@@ -104,7 +118,7 @@ class _ActivityPageState extends State<ActivityPage> {
     return Scaffold(
       backgroundColor: Colors.teal.withOpacity(0.7),
       appBar: buildSearchfiled(),
-      body: searchResultFuture == null ? buildNoContent() : buildSearchResult(),
+      body: searchResultFuture == null ? viewData() : buildSearchResult(),
     );
   }
 }
@@ -116,31 +130,107 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.teal.withOpacity(0.5),
-      child: Column(
+      padding: EdgeInsets.all(10.0),
+      width: 150.0,
+      height: MediaQuery.of(context).size.height * 0.18,
+      child: Stack(
         children: <Widget>[
-          GestureDetector(
-            onTap: () => print('tapped'),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[400],
-                backgroundImage: AssetImage("assets/images/transac.png"),
-              ),
-              title: Text(user.displayName, style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),),
-              subtitle: Text(user.username, style: TextStyle(
-                color: Colors.white
-              ),),
+          Container(
+            margin: EdgeInsets.only(top: 20.0, bottom: 10, right: 10),
+            padding:
+                EdgeInsets.only(top: 10.0, left: 10, right: 10, bottom: 15),
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.22,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black54.withOpacity(0.15),
+                  offset: Offset(5.0, 4.0),
+                  blurRadius: 6.0,
+                ),
+              ],
             ),
-          ),
-          Divider(
-            height: 2.0,
-            color: Colors.white,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.30,
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: 30,
+                        alignment: Alignment.centerLeft,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            user.displayName,
+                            style: TextStyle(fontSize: 15),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        // height: 30,
+                        alignment: Alignment.centerLeft,
+                        child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              user.username,
+                              style: TextStyle(color: Colors.grey[600]),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
+    // return Container(
+    //   color: Colors.teal.withOpacity(0.5),
+    //   child: Column(
+    //     children: <Widget>[
+    //       GestureDetector(
+    //         onTap: () => print('tapped'),
+    //         child: ListTile(
+    //           leading: CircleAvatar(
+    //             backgroundColor: Colors.grey[400],
+    //             backgroundImage: AssetImage("assets/images/transac.png"),
+    //           ),
+    //           title: Text(
+    //             user.displayName,
+    //             style: TextStyle(
+    //               color: Colors.white,
+    //               fontWeight: FontWeight.bold,
+    //             ),
+    //           ),
+    //           subtitle: Text(
+    //             user.username,
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //       ),
+    //       Divider(
+    //         height: 2.0,
+    //         color: Colors.white,
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

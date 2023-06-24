@@ -27,7 +27,8 @@ class AuthController{
         "email": user.email,
         "displayName": user.displayName,
         "bio": "",
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "photoUrl": user.photoUrl
       });
       doc = await usersRef.doc(user.id).get();
     }
