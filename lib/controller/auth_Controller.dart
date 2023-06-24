@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gadain/view/home_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,10 +7,7 @@ import 'package:gadain/model/user.dart' as usermod;
 
 import '../view/create_account.dart';
 
-
-class AuthController{
-
-
+class AuthController {
   void createUserInFirestore(context) async {
     //check if exist
     final GoogleSignInAccount? user = googleSignIn.currentUser;
@@ -34,14 +32,45 @@ class AuthController{
     }
     currentUser = usermod.User.fromDocument(doc);
     print(currentUser);
-    print(currentUser?.username);
   }
 
   login() async {
-    await googleSignIn.signIn();
+    //with credential
+    final GoogleSignInAccount? gUser = await googleSignIn.signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    //basic signin flow
+    // await googleSignIn.signIn();
   }
 
   logout() async {
+    // Get the current user
+    final GoogleSignInAccount? currentUser = await googleSignIn.currentUser;
+
+    if (currentUser != null) {
+      // Get the authentication token
+      final GoogleSignInAuthentication googleAuth = await currentUser.authentication;
+
+      // Create a Google credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign out of Firebase using the credential
+      await firebaseAuth.signOut();
+      await googleSignIn.disconnect();
+      await googleSignIn.signOut();
+
+      print('User logged out successfully.');
+    } else {
+      print('No user is currently signed in.');
+    }
+
+    //basi signout flow
     await googleSignIn.signOut();
   }
 

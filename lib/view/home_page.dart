@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gadain/model/user.dart' as usermod;
 import 'package:gadain/view/login_page.dart';
@@ -8,6 +9,7 @@ import 'package:gadain/widget/bottomnavbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final usersRef = FirebaseFirestore.instance.collection('users');
 final AuthController authController = AuthController();
 final timestamp = DateTime.now();

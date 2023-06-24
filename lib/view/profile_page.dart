@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: header(context, titleText: "Profile"),
       body: TextButton(
         onPressed: () {
-          googleSignIn.signOut();
+          authController.logout();
         },
         child: Text('Logout'),
       ),

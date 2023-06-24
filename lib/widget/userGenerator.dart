@@ -17,12 +17,12 @@ class _UserGeneratorState extends State<UserGenerator> {
   }
 
   createUser() async {
-    await usersRef.doc("nmmdfsvsdm").set({
+    await usersRef.doc("hnvfdhjkfdshj").set({
       "username": "coba",
       "displayName": "Ahmed mubarok",
       "email": "miqbalalhabib@gmail.com",
       "bio": "",
-      "id": "nmmdfsvsdm",
+      "id": "ndfjfdjkh",
       "photoUrl": "https://lh3.googleusercontent.com/a/AAcHTtfcpNtGjK-LkuoJTnyE5zLBd81lF6vP7DozVlIVmA=s96-c",
       "timestamp": timestamp,
     });
