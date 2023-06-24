@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  TextEditingController searchController = TextEditingController();
+
   Future<QuerySnapshot>? searchResultFuture;
 
   handleSearch(String query) {
@@ -26,10 +29,15 @@ class _ActivityPageState extends State<ActivityPage> {
     });
   }
 
+  clearSearch(){
+    searchController.clear();
+  }
+
   AppBar buildSearchfiled() {
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
+        controller: searchController,
         decoration: InputDecoration(
             hintText: "Search",
             filled: true,
@@ -39,7 +47,7 @@ class _ActivityPageState extends State<ActivityPage> {
             ),
             suffixIcon: IconButton(
               icon: Icon(Icons.clear),
-              onPressed: () => print('cleared'),
+              onPressed: clearSearch,
             )),
         onFieldSubmitted: handleSearch,
       ),
@@ -79,10 +87,11 @@ class _ActivityPageState extends State<ActivityPage> {
           if (!snapshot.hasData) {
             return CircularProgress();
           }
-          List<Text> searchResult = [];
+          List<Result> searchResult = [];
           snapshot.data?.docs.forEach((doc) {
             usermod.User user = usermod.User.fromDocument(doc);
-            searchResult.add(Text(user.username));
+            Result result = Result(user);
+            searchResult.add(result);
           });
           return ListView(
             children: searchResult
@@ -101,10 +110,37 @@ class _ActivityPageState extends State<ActivityPage> {
 }
 
 class Result extends StatelessWidget {
-  const Result({super.key});
+  final usermod.User user;
+  Result(this.user);
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      color: Colors.teal.withOpacity(0.5),
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => print('tapped'),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[400],
+                backgroundImage: AssetImage("assets/images/transac.png"),
+              ),
+              title: Text(user.displayName, style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),),
+              subtitle: Text(user.username, style: TextStyle(
+                color: Colors.white
+              ),),
+            ),
+          ),
+          Divider(
+            height: 2.0,
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
   }
 }
