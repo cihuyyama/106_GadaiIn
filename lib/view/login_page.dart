@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gadain/controller/auth_Controller.dart';
 
-final AuthController authController = AuthController();
+Scaffold LoginPage() {
+  final AuthController authController = AuthController();
 
-Scaffold LoginPage(context,) {
   return Scaffold(
     body: Stack(
       children: [
@@ -13,8 +13,8 @@ Scaffold LoginPage(context,) {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                Theme.of(context).primaryColor,
-                Theme.of(context).colorScheme.secondary,
+                Colors.deepPurple,
+                Colors.teal,
               ],
             ),
           ),

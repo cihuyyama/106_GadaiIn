@@ -43,4 +43,8 @@ class AuthController{
   logout() async {
     await googleSignIn.signOut();
   }
+
+  void dispose() {
+    googleSignIn.disconnect();
+  }
 }

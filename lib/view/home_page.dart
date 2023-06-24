@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gadain/model/user.dart' as usermod;
 import 'package:gadain/view/login_page.dart';
 import 'package:gadain/controller/auth_Controller.dart';
+import 'package:gadain/view/splash_screen.dart';
 import 'package:gadain/widget/bottomnavbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -66,13 +67,19 @@ class _HomePageState extends State<HomePage> {
     pageController.dispose();
     super.dispose();
   }
+
+  
   
   Bottomnavbar buildAuthScreen() {
     return bottomnavbar;
   }
 
   Scaffold buildUnAuthScreen() {
-    return LoginPage(context);
+    return LoginPage();
+  }
+
+  Scaffold loadingscreen(){
+    return SplashScreen();
   }
 
   @override
