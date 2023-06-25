@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gadain/view/add_gadai.dart';
 import 'package:gadain/view/home_page.dart';
 import 'package:gadain/widget/userGenerator.dart';
 
