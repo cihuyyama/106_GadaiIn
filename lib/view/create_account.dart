@@ -1,40 +1,42 @@
 import 'dart:async';
-
+import 'package:gadain/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gadain/widget/header.dart';
 
-class CreateAccount extends StatefulWidget {
-  const CreateAccount({super.key});
+class CreateAccount extends StatelessWidget {
+  CreateAccount({super.key});
 
-  @override
-  State<CreateAccount> createState() => _CreateAccountState();
-}
-
-class _CreateAccountState extends State<CreateAccount> {
-  final scaffoldkey = GlobalKey<ScaffoldMessengerState>();
   final formkey = GlobalKey<FormState>();
+
+  final scaffoldkey = GlobalKey<ScaffoldMessengerState>();
+
   String? username;
 
-  void submit() {
-    final form = formkey.currentState;
+  submit(BuildContext context) {
+  final form = formkey.currentState;
+  final scaffold = scaffoldkey.currentState;
 
-    if (form!.validate()) {
+  if (form != null && scaffold != null) {
+    if (form.validate()) {
       form.save();
       SnackBar snackBar = SnackBar(content: Text("Welcome $username"));
-      scaffoldkey.currentState?.showSnackBar(snackBar);
+      scaffold.showSnackBar(snackBar);
       Timer(
         Duration(seconds: 2),
         () {
-          Navigator.pop(context, username);
+          Navigator.of(context).pop(username);
         },
       );
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText: "Set up your Username", removeBackbutton: true),
+      appBar: header(context,
+          titleText: "Set up your Username", removeBackbutton: true),
       body: ListView(
         children: <Widget>[
           Container(
@@ -76,7 +78,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: submit,
+                  onTap: submit(context),
                   child: Container(
                     height: 50.0,
                     width: 350.0,

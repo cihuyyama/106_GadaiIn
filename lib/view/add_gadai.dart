@@ -10,7 +10,7 @@ import 'package:gadain/model/user.dart' as usermod;
 import '../widget/header.dart';
 import 'home_page.dart';
 
-  final GadaiController gadaiController = GadaiController();
+final GadaiController gadaiController = GadaiController();
 
 class AddGadai extends StatefulWidget {
   const AddGadai({super.key});
@@ -25,6 +25,7 @@ class _AddGadaiState extends State<AddGadai> {
   TextEditingController _namaBarangController = TextEditingController();
   TextEditingController _jumlahGadaiController = TextEditingController();
   TextEditingController _statusGadaiController = TextEditingController();
+  final GoogleSignInAccount? user = googleSignIn.currentUser;
   DateTime? _selectedDate;
   double _bunga = 0.0;
 
@@ -66,42 +67,25 @@ class _AddGadaiState extends State<AddGadai> {
     }
   }
 
-  saveDataToFirestore() async {
-    final GoogleSignInAccount? user = googleSignIn.currentUser;
-    DocumentSnapshot doc = await usersRef.doc(user?.id).get();
-    String namaPenggadai = _namaPenggadaiController.text;
-    String nik = _nikController.text;
-    String namaBarang = _namaBarangController.text;
-    double jumlahGadai =
-        double.parse(_jumlahGadaiController.text.replaceAll(',', ''));
-    String statusGadai = _statusGadaiController.text;
-    DateTime? jatuhTempo = _selectedDate;
-    double bunga = _bunga;
+  addData() async {
+    gadaiController.addDataToFirestore(
+        context,
+        await usersRef.doc(user?.id).get(),
+        _namaPenggadaiController.text,
+        _nikController.text,
+        _namaBarangController.text,
+        double.parse(_jumlahGadaiController.text.replaceAll(',', '')),
+        _statusGadaiController.text,
+        _selectedDate,
+        _bunga);
 
-    FirebaseFirestore.instance.collection('gadai').doc(user!.id).set({
-      'namaPenggadai': namaPenggadai,
-      'nik': nik,
-      'namaBarang': namaBarang,
-      'jumlahGadai': jumlahGadai,
-      'statusGadai': statusGadai,
-      'jatuhTempo': jatuhTempo,
-      'bunga': bunga,
-    }).then((value) {
-      // Success
-      print('Data saved to Firestore!');
-      // Clear the text fields
-      _namaPenggadaiController.clear();
-      _nikController.clear();
-      _namaBarangController.clear();
-      _jumlahGadaiController.clear();
-      _statusGadaiController.clear();
-      _selectedDate = null;
-      _bunga = 0.0;
-      Navigator.pop(context);
-    }).catchError((error) {
-      // Error
-      print('Failed to save data to Firestore: $error');
-    });
+    _namaPenggadaiController.clear();
+    _nikController.clear();
+    _namaBarangController.clear();
+    _jumlahGadaiController.clear();
+    _statusGadaiController.clear();
+    _selectedDate = null;
+    _bunga = 0.0;
   }
 
   @override
@@ -124,7 +108,8 @@ class _AddGadaiState extends State<AddGadai> {
               ),
               TextField(
                 controller: _namaBarangController,
-                decoration: InputDecoration(labelText: 'Nama Barang yang Digadai'),
+                decoration:
+                    InputDecoration(labelText: 'Nama Barang yang Digadai'),
               ),
               TextField(
                 controller: _jumlahGadaiController,
@@ -175,9 +160,9 @@ class _AddGadaiState extends State<AddGadai> {
               SizedBox(height: 16.0),
               ElevatedButton(
                 style: ButtonStyle(
-                  // backgroundColor: Colors.teal.shade100
-                ),
-                onPressed:saveDataToFirestore,
+                    // backgroundColor: Colors.teal.shade100
+                    ),
+                onPressed: addData,
                 child: Text(
                   'Submit',
                   style: TextStyle(color: Colors.white),
@@ -190,4 +175,3 @@ class _AddGadaiState extends State<AddGadai> {
     );
   }
 }
-

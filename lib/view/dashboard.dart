@@ -5,8 +5,11 @@ import 'package:gadain/widget/header.dart';
 import 'package:gadain/widget/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gadain/model/user.dart' as usermod;
+import 'package:intl/intl.dart';
+
 
 final usersRef = FirebaseFirestore.instance.collection('users');
+DateTime now = DateTime.now();
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -120,11 +123,10 @@ class _DashboardState extends State<Dashboard> {
               ),
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddGadai(),
-                  )
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddGadai(),
+                    ));
               },
             ),
           ),
@@ -164,113 +166,51 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class Result extends StatelessWidget {
+  String formattedDate = DateFormat.yMMMEd().format(now);
   final usermod.User user;
   Result(this.user);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      width: 150.0,
-      height: MediaQuery.of(context).size.height * 0.18,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 20.0, bottom: 10, right: 10),
-            padding:
-                EdgeInsets.only(top: 10.0, left: 10, right: 10, bottom: 15),
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.22,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black54.withOpacity(0.15),
-                  offset: Offset(5.0, 4.0),
-                  blurRadius: 6.0,
-                ),
-              ],
-            ),
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.30,
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        height: 30,
-                        alignment: Alignment.centerLeft,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Text(
-                            user.displayName,
-                            style: TextStyle(fontSize: 15),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        // height: 30,
-                        alignment: Alignment.centerLeft,
-                        child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              user.username,
-                              style: TextStyle(color: Colors.grey[600]),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: InkWell(
+        onLongPress: () {
+          // Navigator.push(
+          //   // context,
+          //   // MaterialPageRoute(
+          //   //   builder: (context) => DetailDataTbc(
+          //   //       tbcid: datatbc[index]['tbcid'],
+          //   //       hari: datatbc[index]['hari'],
+          //   //       datetime: datatbc[index]['datetime'],
+          //   //       bb: datatbc[index]['beratbadan'],
+          //   //       keluhan: datatbc[index]['keluhan'],
+          //   //       tindakan: datatbc[index]['tindakan']),
+          //   // ),
+          // );
+        },
+        child: Card(
+          elevation: 10,
+          child: ListTile(
+            title: Text(user.displayName),
+            leading: Text(formattedDate),
+            subtitle: Text(user.username),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                
+                // tbcctrl.removeTbc(datatbc[index]['tbcid'].toString());
+                // setState(() {
+                //   tbcctrl.getTbc();
+                // });
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Contact Deleted')));
+              },
             ),
           ),
-        ],
+        ),
       ),
     );
-    // return Container(
-    //   color: Colors.teal.withOpacity(0.5),
-    //   child: Column(
-    //     children: <Widget>[
-    //       GestureDetector(
-    //         onTap: () => print('tapped'),
-    //         child: ListTile(
-    //           leading: CircleAvatar(
-    //             backgroundColor: Colors.grey[400],
-    //             backgroundImage: AssetImage("assets/images/transac.png"),
-    //           ),
-    //           title: Text(
-    //             user.displayName,
-    //             style: TextStyle(
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.bold,
-    //             ),
-    //           ),
-    //           subtitle: Text(
-    //             user.username,
-    //             style: TextStyle(color: Colors.white),
-    //           ),
-    //         ),
-    //       ),
-    //       Divider(
-    //         height: 2.0,
-    //         color: Colors.white,
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

@@ -7,6 +7,7 @@ import 'package:gadain/controller/auth_Controller.dart';
 import 'package:gadain/view/splash_screen.dart';
 import 'package:gadain/widget/bottomnavbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:gadain/view/create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
