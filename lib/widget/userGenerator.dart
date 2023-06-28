@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gadain/view/dashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 final DateTime timestamp = DateTime.now();
 
 class UserGenerator extends StatefulWidget {
@@ -10,6 +11,7 @@ class UserGenerator extends StatefulWidget {
 }
 
 class _UserGeneratorState extends State<UserGenerator> {
+  final usersRef = FirebaseFirestore.instance.collection('users');
   @override
   void initState() {
     createUser();

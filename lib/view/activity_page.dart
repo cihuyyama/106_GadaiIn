@@ -15,6 +15,7 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  final usersRef = FirebaseFirestore.instance.collection('users');
   TextEditingController searchController = TextEditingController();
 
   Future<QuerySnapshot>? searchResultFuture;

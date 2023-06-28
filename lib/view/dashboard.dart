@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gadain/model/gadai.dart';
 import 'package:gadain/view/add_gadai.dart';
-import 'package:gadain/widget/header.dart';
-import 'package:gadain/widget/progress.dart';
+import 'package:gadain/view/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gadain/model/user.dart' as usermod;
+import 'package:gadain/model/user.dart';
 import 'package:intl/intl.dart';
 
-
-final usersRef = FirebaseFirestore.instance.collection('users');
 DateTime now = DateTime.now();
 
 class Dashboard extends StatefulWidget {
@@ -19,13 +17,21 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final usersRef = FirebaseFirestore.instance.collection('users');
+  final transac = FirebaseFirestore.instance
+      .collection('gadai')
+      .doc(googleSignIn.currentUser!.id)
+      .collection("transac");
   TextEditingController searchController = TextEditingController();
 
   Future<QuerySnapshot>? searchResultFuture;
 
   handleSearch(String query) {
     Future<QuerySnapshot> users =
-        usersRef.where("username", isGreaterThanOrEqualTo: query).get();
+        transac
+        .where("namaPenggadai", isGreaterThanOrEqualTo: query)
+        .where("namaBarang", isGreaterThanOrEqualTo: query)
+        .get();
     setState(() {
       searchResultFuture = users;
     });
@@ -87,14 +93,14 @@ class _DashboardState extends State<Dashboard> {
       body: Stack(
         children: <Widget>[
           StreamBuilder<QuerySnapshot>(
-            stream: usersRef.snapshots(),
+            stream: transac.snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return buildNoContent();
               }
               List<Result> searchResult = [];
               snapshot.data?.docs.forEach((doc) {
-                usermod.User user = usermod.User.fromDocument(doc);
+                gadai user = gadai.fromDocument(doc);
                 Result result = Result(user);
                 searchResult.add(result);
               });
@@ -144,7 +150,7 @@ class _DashboardState extends State<Dashboard> {
           }
           List<Result> searchResult = [];
           snapshot.data?.docs.forEach((doc) {
-            usermod.User user = usermod.User.fromDocument(doc);
+            gadai user = gadai.fromDocument(doc);
             Result result = Result(user);
             searchResult.add(result);
           });
@@ -167,45 +173,38 @@ class _DashboardState extends State<Dashboard> {
 
 class Result extends StatelessWidget {
   String formattedDate = DateFormat.yMMMEd().format(now);
-  final usermod.User user;
+  final gadai user;
   Result(this.user);
 
   @override
   Widget build(BuildContext context) {
+    String penggadai = user.namaPenggadai;
+    String barang = user.namaBarang;
+    var tempo = DateFormat.yMMMEd().format(user.jatuhTempo!.toDate());
+    bool iStatus = true;
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: InkWell(
-        onLongPress: () {
-          // Navigator.push(
-          //   // context,
-          //   // MaterialPageRoute(
-          //   //   builder: (context) => DetailDataTbc(
-          //   //       tbcid: datatbc[index]['tbcid'],
-          //   //       hari: datatbc[index]['hari'],
-          //   //       datetime: datatbc[index]['datetime'],
-          //   //       bb: datatbc[index]['beratbadan'],
-          //   //       keluhan: datatbc[index]['keluhan'],
-          //   //       tindakan: datatbc[index]['tindakan']),
-          //   // ),
-          // );
-        },
+      child: GestureDetector(
         child: Card(
-          elevation: 10,
+          elevation: 5,
           child: ListTile(
-            title: Text(user.displayName),
-            leading: Text(formattedDate),
-            subtitle: Text(user.username),
+            title: Text("Nama : $penggadai \nBarang : $barang"),
+            leading: Text(
+              iStatus ? "Belum\nLunas" : "Lunas",
+              style: TextStyle(color: Colors.red),
+            ),
+            subtitle: Text("Tempo : $tempo"),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                
+                gadaiController.delTransacdoc(user.docId);
                 // tbcctrl.removeTbc(datatbc[index]['tbcid'].toString());
                 // setState(() {
                 //   tbcctrl.getTbc();
                 // });
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Contact Deleted')));
+                    const SnackBar(content: Text('data Deleted')));
               },
             ),
           ),

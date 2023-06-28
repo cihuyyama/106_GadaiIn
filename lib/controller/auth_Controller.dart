@@ -77,4 +77,9 @@ class AuthController {
   void dispose() {
     googleSignIn.disconnect();
   }
+
+  deleteUser(id)async{
+    final user = FirebaseFirestore.instance.collection('users');
+    await user.doc(id).delete();
+  }
 }
