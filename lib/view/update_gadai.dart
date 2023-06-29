@@ -1,23 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
-import 'package:gadain/controller/gadai_Controller.dart';
-import 'package:gadain/model/user.dart' as usermod;
 
+import '../controller/gadai_Controller.dart';
 import '../widget/header.dart';
 import 'home_page.dart';
 
-class AddGadai extends StatefulWidget {
-  const AddGadai({super.key});
+class UpdateGadai extends StatefulWidget {
+  const UpdateGadai({
+    Key? key,
+    this.docId,
+    this.namaPenggadai,
+    this.nik,
+    this.namaBarang,
+    this.jumlahGadai,
+    this.statusGadai,
+    this.jatuhTempo,
+    this.bunga,
+  }) : super(key: key);
 
   @override
-  State<AddGadai> createState() => _AddGadaiState();
+  State<UpdateGadai> createState() => _UpdateGadaiState();
+  final String? docId;
+  final String? namaPenggadai;
+  final String? nik;
+  final String? namaBarang;
+  final double? jumlahGadai;
+  final String? statusGadai;
+  final DateTime? jatuhTempo;
+  final double? bunga;
 }
 
-class _AddGadaiState extends State<AddGadai> {
+class _UpdateGadaiState extends State<UpdateGadai> {
   final GadaiController gadaiController = GadaiController();
   TextEditingController _namaPenggadaiController = TextEditingController();
   TextEditingController _nikController = TextEditingController();
@@ -27,17 +40,51 @@ class _AddGadaiState extends State<AddGadai> {
   final GoogleSignInAccount? user = googleSignIn.currentUser;
   DateTime? _selectedDate;
   double _bunga = 0.0;
-  List<String> ket = ['Lunas', 'Belum Lunas'];
 
-  List<DropdownMenuItem<String>> generateItems(List<String> ket) {
-    List<DropdownMenuItem<String>> items = [];
-    for (var item in ket) {
-      items.add(DropdownMenuItem(
-        child: Text(item),
-        value: item,
-      ));
-    }
-    return items;
+  @override
+  void initState() {
+    super.initState();
+    _namaPenggadaiController.text = widget.namaPenggadai ?? '';
+    _nikController.text = widget.nik ?? '';
+    _namaBarangController.text = widget.namaBarang ?? '';
+    _jumlahGadaiController.text = widget.jumlahGadai?.toString() ?? '';
+    _statusGadaiController.text = widget.statusGadai ?? '';
+    _selectedDate = widget.jatuhTempo;
+    _bunga = widget.bunga ?? 0.0;
+    String id = widget.docId!;
+  }
+
+  updatedata() async {
+    gadaiController.updateDataToFirestore(
+      context,
+      widget.docId!,
+      await usersRef.doc(user?.id).get(),
+      _namaPenggadaiController.text,
+      _nikController.text,
+      _namaBarangController.text,
+      double.parse(_jumlahGadaiController.text.replaceAll(',', '')),
+      _statusGadaiController.text,
+      _selectedDate,
+      _bunga,
+    );
+
+    _namaPenggadaiController.clear();
+    _nikController.clear();
+    _namaBarangController.clear();
+    _jumlahGadaiController.clear();
+    _statusGadaiController.clear();
+    _selectedDate = null;
+    _bunga = 0.0;
+  }
+
+  @override
+  void dispose() {
+    _namaPenggadaiController.dispose();
+    _nikController.dispose();
+    _namaBarangController.dispose();
+    _jumlahGadaiController.dispose();
+    _statusGadaiController.dispose();
+    super.dispose();
   }
 
   void _calculateBunga(DateTime? selectedDate) {
@@ -65,7 +112,7 @@ class _AddGadaiState extends State<AddGadai> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 28)),
     );
@@ -78,31 +125,10 @@ class _AddGadaiState extends State<AddGadai> {
     }
   }
 
-  addData() async {
-    gadaiController.addDataToFirestore(
-        context,
-        await usersRef.doc(user?.id).get(),
-        _namaPenggadaiController.text,
-        _nikController.text,
-        _namaBarangController.text,
-        double.parse(_jumlahGadaiController.text.replaceAll(',', '')),
-        _statusGadaiController.text,
-        _selectedDate,
-        _bunga);
-
-    _namaPenggadaiController.clear();
-    _nikController.clear();
-    _namaBarangController.clear();
-    _jumlahGadaiController.clear();
-    _statusGadaiController.clear();
-    _selectedDate = null;
-    _bunga = 0.0;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText: "Tambah Penggadaian"),
+      appBar: header(context, titleText: "Update Penggadaian"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -143,7 +169,7 @@ class _AddGadaiState extends State<AddGadai> {
                 child: DropdownButton<String>(
                   borderRadius: BorderRadius.circular(10),
                   icon: const Icon(Icons.arrow_drop_down_circle_rounded),
-                  // value: _statusGadaiController.text,
+                  value: _statusGadaiController.text,
                   items: [
                     DropdownMenuItem(
                       value: 'Lunas',
@@ -175,7 +201,7 @@ class _AddGadaiState extends State<AddGadai> {
                   ),
                 ),
               ),
-              TextField(
+              TextFormField(
                 controller: TextEditingController(text: _bunga.toString()),
                 decoration: InputDecoration(labelText: 'Bunga (%)'),
                 readOnly: true,
@@ -202,9 +228,9 @@ class _AddGadaiState extends State<AddGadai> {
               SizedBox(height: 16.0),
               ElevatedButton(
                 style: ButtonStyle(
-                    // backgroundColor: Colors.teal.shade100
-                    ),
-                onPressed: addData,
+                  // backgroundColor: Colors.teal.shade100
+                ),
+                onPressed: updatedata,
                 child: Text(
                   'Submit',
                   style: TextStyle(color: Colors.white),

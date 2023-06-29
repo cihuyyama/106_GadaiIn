@@ -11,6 +11,7 @@ class gadai {
   final double jumlahGadai;
   final Timestamp? jatuhTempo;
   final double bunga;
+  final String statusGadai;
 
   gadai({
     required this.docId,
@@ -20,6 +21,7 @@ class gadai {
     required this.jumlahGadai,
     this.jatuhTempo,
     required this.bunga,
+    required this.statusGadai
   });
 
   factory gadai.fromDocument(DocumentSnapshot doc){
@@ -30,7 +32,8 @@ class gadai {
       namaBarang: doc['namaBarang'],
       jumlahGadai: doc['jumlahGadai'],
       jatuhTempo: doc['jatuhTempo'],
-      bunga: doc['bunga']
+      bunga: doc['bunga'],
+      statusGadai: doc['statusGadai']
     );
   }
 

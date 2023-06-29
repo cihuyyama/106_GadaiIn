@@ -44,8 +44,47 @@ class GadaiController {
     });
   }
 
-  delTransacdoc(id)async{
-    DocumentReference docRef = user.doc(gUser!.id).collection('transac').doc(id);
+  updateDataToFirestore(
+      context,
+      String id,
+      DocumentSnapshot doc,
+      String namaPenggadai,
+      String nik,
+      String namaBarang,
+      double jumlahGadai,
+      String statusGadai,
+      DateTime? jatuhTempo,
+      double bunga) async {
+    DocumentReference documentReference = user
+        .doc(gUser!.id)
+        .collection('transac')
+        .doc(id); // Get the document reference using the document ID
+
+    // Update the document data
+    await documentReference.update({
+      'namaPenggadai': namaPenggadai,
+      'nik': nik,
+      'namaBarang': namaBarang,
+      'jumlahGadai': jumlahGadai,
+      'statusGadai': statusGadai,
+      'jatuhTempo': jatuhTempo,
+      'bunga': bunga,
+    }).then((value) {
+      // Success
+      print('Data updated in Firestore!');
+      Navigator.pop(context);
+    }).catchError((error) {
+      // Error
+      print(doc.id);
+      print('Failed to update data in Firestore: $error');
+    });
+
+    // Update any other necessary operations
+  }
+
+  delTransacdoc(id) async {
+    DocumentReference docRef =
+        user.doc(gUser!.id).collection('transac').doc(id);
     await docRef.delete();
   }
 }

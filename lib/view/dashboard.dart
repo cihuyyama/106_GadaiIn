@@ -5,7 +5,10 @@ import 'package:gadain/view/add_gadai.dart';
 import 'package:gadain/view/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gadain/model/user.dart';
+import 'package:gadain/view/update_gadai.dart';
 import 'package:intl/intl.dart';
+
+import '../controller/gadai_Controller.dart';
 
 DateTime now = DateTime.now();
 
@@ -172,40 +175,66 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class Result extends StatelessWidget {
+  final formKey = GlobalKey<FormState>();
   String formattedDate = DateFormat.yMMMEd().format(now);
   final gadai user;
   Result(this.user);
 
   @override
   Widget build(BuildContext context) {
+    final GadaiController gadaiController = GadaiController();
     String penggadai = user.namaPenggadai;
     String barang = user.namaBarang;
     var tempo = DateFormat.yMMMEd().format(user.jatuhTempo!.toDate());
     bool iStatus = true;
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: GestureDetector(
-        child: Card(
-          elevation: 5,
-          child: ListTile(
-            title: Text("Nama : $penggadai \nBarang : $barang"),
-            leading: Text(
-              iStatus ? "Belum\nLunas" : "Lunas",
-              style: TextStyle(color: Colors.red),
-            ),
-            subtitle: Text("Tempo : $tempo"),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                gadaiController.delTransacdoc(user.docId);
-                // tbcctrl.removeTbc(datatbc[index]['tbcid'].toString());
-                // setState(() {
-                //   tbcctrl.getTbc();
-                // });
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('data Deleted')));
-              },
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: GestureDetector(
+          child: Card(
+            elevation: 5,
+            child: ListTile(
+              title: Text("Nama : $penggadai \nBarang : $barang"),
+              leading: Text(
+                iStatus ? "Belum\nLunas" : "Lunas",
+                style: TextStyle(color: Colors.red),
+              ),
+              subtitle: Text("Tempo : $tempo"),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      print(user.docId);
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdateGadai(
+                          docId: user.docId,
+                          namaPenggadai: user.namaPenggadai,
+                          nik: user.nik,
+                          bunga: user.bunga,
+                          jatuhTempo: user.jatuhTempo!.toDate(),
+                          jumlahGadai: user.jumlahGadai,
+                          namaBarang: user.namaBarang,
+                          statusGadai: user.statusGadai,
+                        ),
+                      ));
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      gadaiController.delTransacdoc(user.docId);
+    
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('data Deleted')));
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
