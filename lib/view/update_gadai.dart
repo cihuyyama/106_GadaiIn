@@ -51,7 +51,6 @@ class _UpdateGadaiState extends State<UpdateGadai> {
     _statusGadaiController.text = widget.statusGadai ?? '';
     _selectedDate = widget.jatuhTempo;
     _bunga = widget.bunga ?? 0.0;
-    String id = widget.docId!;
   }
 
   updatedata() async {

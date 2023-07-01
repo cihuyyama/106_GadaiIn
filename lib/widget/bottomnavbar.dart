@@ -36,7 +36,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
         children: <Widget>[
           Dashboard(),
           // TextButton(onPressed: authController.logout, child: Text('Logout')),
-          ActivityPage(),
+          // ActivityPage(),
           CashFlowPage(),
           ProfilePage(),
         ],
@@ -55,7 +55,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard)),
           BottomNavigationBarItem(icon: Icon(Icons.receipt_long_rounded)),
-          BottomNavigationBarItem(icon: Icon(Icons.monitor_heart_rounded)),
+          // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart_rounded)),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle_rounded)),
         ],
       ),

@@ -27,18 +27,6 @@ class _AddGadaiState extends State<AddGadai> {
   final GoogleSignInAccount? user = googleSignIn.currentUser;
   DateTime? _selectedDate;
   double _bunga = 0.0;
-  List<String> ket = ['Lunas', 'Belum Lunas'];
-
-  List<DropdownMenuItem<String>> generateItems(List<String> ket) {
-    List<DropdownMenuItem<String>> items = [];
-    for (var item in ket) {
-      items.add(DropdownMenuItem(
-        child: Text(item),
-        value: item,
-      ));
-    }
-    return items;
-  }
 
   void _calculateBunga(DateTime? selectedDate) {
     if (selectedDate != null) {

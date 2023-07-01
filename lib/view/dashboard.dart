@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
     Future<QuerySnapshot> users =
         transac
         .where("namaPenggadai", isGreaterThanOrEqualTo: query)
-        .where("namaBarang", isGreaterThanOrEqualTo: query)
         .get();
     setState(() {
       searchResultFuture = users;
