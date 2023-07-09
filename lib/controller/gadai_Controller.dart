@@ -45,27 +45,18 @@ class GadaiController {
       print('Failed to save data to Firestore: $error');
     });
 
-    user
-        .doc(user.id)
-        .collection('transac')
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-      snapshot.docChanges.forEach((change) {
-        final statusGadai = change.doc.get('statusGadai') as String;
-        final jumlahGadai = change.doc.get('jumlahGadai') as double? ?? 0.0;
+    final DocumentSnapshot userDoc = await usersRef.doc(gUser!.id).get();
+    final double currentBalance = userDoc.get('balance') ?? 0.0;
 
-        // Update balance based on status
-        if (statusGadai == 'Belum Lunas') {
-          userRef.update({
-            'balance': FieldValue.increment(-jumlahGadai),
-          });
-        } else if (statusGadai == 'Lunas') {
-          userRef.update({
-            'balance': FieldValue.increment(jumlahGadai),
-          });
-        }
+    if (statusGadai == 'Belum Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance - jumlahGadai,
       });
-    });
+    } else if (statusGadai == 'Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance + jumlahGadai,
+      });
+    }
   }
 
   updateDataToFirestore(
@@ -115,34 +106,28 @@ class GadaiController {
         'balance': currentBalance + jumlahGadai,
       });
     }
-    
   }
 
   delTransacdoc(id) async {
     DocumentReference docRef =
         user.doc(gUser!.id).collection('transac').doc(id);
+    final DocumentSnapshot transacDoc = await docRef.get();
+    final String statusGadai = transacDoc.get('statusGadai') as String;
+    final double jumlahGadai = transacDoc.get('jumlahGadai') as double? ?? 0.0;
     await docRef.delete();
 
-    // user
-    //     .doc(user.id)
-    //     .collection('transac')
-    //     .snapshots()
-    //     .listen((QuerySnapshot snapshot) {
-    //   snapshot.docChanges.forEach((change) {
-    //     final statusGadai = change.doc.get('statusGadai') as String;
-    //     final jumlahGadai = change.doc.get('jumlahGadai') as double? ?? 0.0;
+    final DocumentSnapshot userDoc = await usersRef.doc(gUser!.id).get();
+    final double currentBalance = userDoc.get('balance') ?? 0.0;
 
-    //     // Update balance based on status
-    //     if (statusGadai == 'Belum Lunas') {
-    //       userRef.update({
-    //         'balance': FieldValue.increment(-jumlahGadai),
-    //       });
-    //     } else if (statusGadai == 'Lunas') {
-    //       userRef.update({
-    //         'balance': FieldValue.increment(jumlahGadai),
-    //       });
-    //     }
-    //   });
-    // });
+
+    if (statusGadai == 'Belum Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance + jumlahGadai,
+      });
+    } else if (statusGadai == 'Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance - jumlahGadai,
+      });
+    }
   }
 }
