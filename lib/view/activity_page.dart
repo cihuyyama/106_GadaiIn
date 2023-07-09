@@ -202,36 +202,5 @@ class Result extends StatelessWidget {
         ],
       ),
     );
-    // return Container(
-    //   color: Colors.teal.withOpacity(0.5),
-    //   child: Column(
-    //     children: <Widget>[
-    //       GestureDetector(
-    //         onTap: () => print('tapped'),
-    //         child: ListTile(
-    //           leading: CircleAvatar(
-    //             backgroundColor: Colors.grey[400],
-    //             backgroundImage: AssetImage("assets/images/transac.png"),
-    //           ),
-    //           title: Text(
-    //             user.displayName,
-    //             style: TextStyle(
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.bold,
-    //             ),
-    //           ),
-    //           subtitle: Text(
-    //             user.username,
-    //             style: TextStyle(color: Colors.white),
-    //           ),
-    //         ),
-    //       ),
-    //       Divider(
-    //         height: 2.0,
-    //         color: Colors.white,
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

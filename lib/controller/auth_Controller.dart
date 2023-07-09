@@ -34,6 +34,7 @@ class AuthController {
     print(currentUser);
   }
 
+
   login() async {
     //with credential
     final GoogleSignInAccount? gUser = await googleSignIn.signIn();

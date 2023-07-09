@@ -4,7 +4,6 @@ import 'package:gadain/model/gadai.dart';
 import 'package:gadain/view/add_gadai.dart';
 import 'package:gadain/view/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gadain/model/user.dart';
 import 'package:gadain/view/update_gadai.dart';
 import 'package:intl/intl.dart';
 

@@ -7,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 CollectionReference user = FirebaseFirestore.instance.collection('gadai');
 final GoogleSignInAccount? gUser = googleSignIn.currentUser;
+final DocumentReference userRef =
+    FirebaseFirestore.instance.collection('users').doc(currentUser!.id);
 
 class GadaiController {
   addDataToFirestore(
@@ -41,6 +43,28 @@ class GadaiController {
     }).catchError((error) {
       // Error
       print('Failed to save data to Firestore: $error');
+    });
+
+    user
+        .doc(user.id)
+        .collection('transac')
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      snapshot.docChanges.forEach((change) {
+        final statusGadai = change.doc.get('statusGadai') as String;
+        final jumlahGadai = change.doc.get('jumlahGadai') as double? ?? 0.0;
+
+        // Update balance based on status
+        if (statusGadai == 'Belum Lunas') {
+          userRef.update({
+            'balance': FieldValue.increment(-jumlahGadai),
+          });
+        } else if (statusGadai == 'Lunas') {
+          userRef.update({
+            'balance': FieldValue.increment(jumlahGadai),
+          });
+        }
+      });
     });
   }
 
@@ -79,12 +103,46 @@ class GadaiController {
       print('Failed to update data in Firestore: $error');
     });
 
-    // Update any other necessary operations
+    final DocumentSnapshot userDoc = await usersRef.doc(gUser!.id).get();
+    final double currentBalance = userDoc.get('balance') ?? 0.0;
+
+    if (statusGadai == 'Belum Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance - jumlahGadai,
+      });
+    } else if (statusGadai == 'Lunas') {
+      usersRef.doc(gUser!.id).update({
+        'balance': currentBalance + jumlahGadai,
+      });
+    }
+    
   }
 
   delTransacdoc(id) async {
     DocumentReference docRef =
         user.doc(gUser!.id).collection('transac').doc(id);
     await docRef.delete();
+
+    // user
+    //     .doc(user.id)
+    //     .collection('transac')
+    //     .snapshots()
+    //     .listen((QuerySnapshot snapshot) {
+    //   snapshot.docChanges.forEach((change) {
+    //     final statusGadai = change.doc.get('statusGadai') as String;
+    //     final jumlahGadai = change.doc.get('jumlahGadai') as double? ?? 0.0;
+
+    //     // Update balance based on status
+    //     if (statusGadai == 'Belum Lunas') {
+    //       userRef.update({
+    //         'balance': FieldValue.increment(-jumlahGadai),
+    //       });
+    //     } else if (statusGadai == 'Lunas') {
+    //       userRef.update({
+    //         'balance': FieldValue.increment(jumlahGadai),
+    //       });
+    //     }
+    //   });
+    // });
   }
 }
