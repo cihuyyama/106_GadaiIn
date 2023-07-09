@@ -10,7 +10,9 @@ Widget logoutButton(){
     },
     child: Text(
       'logout',
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(
+        color: Colors.white,
+      ),
     ),
   );
 }
@@ -32,7 +34,6 @@ AppBar header(context,
     ),
     actions: [
       logout ? logoutButton() : TextButton(onPressed: () {
-        
       }, child: Text(''))
     ],
     centerTitle: true,

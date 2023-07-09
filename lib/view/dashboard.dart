@@ -185,7 +185,26 @@ class Result extends StatelessWidget {
     String penggadai = user.namaPenggadai;
     String barang = user.namaBarang;
     var tempo = DateFormat.yMMMEd().format(user.jatuhTempo!.toDate());
-    bool iStatus = true;
+    String status = user.statusGadai;
+
+    Text istatus(){
+      if (status =="Lunas") {
+        return Text(
+          "Lunas",
+          style: TextStyle(
+            color: Colors.blue
+          ),
+        );
+      } else {
+        return Text(
+          "Belum\nLunas",
+          style: TextStyle(
+            color: Colors.red
+          ),
+        );
+      }
+    }
+
     return Form(
       key: formKey,
       child: Padding(
@@ -195,10 +214,7 @@ class Result extends StatelessWidget {
             elevation: 5,
             child: ListTile(
               title: Text("Nama : $penggadai \nBarang : $barang"),
-              leading: Text(
-                iStatus ? "Belum\nLunas" : "Lunas",
-                style: TextStyle(color: Colors.red),
-              ),
+              leading: istatus(),
               subtitle: Text("Tempo : $tempo"),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

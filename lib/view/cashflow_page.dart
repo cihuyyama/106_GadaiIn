@@ -125,13 +125,13 @@ class _CashFlowPageState extends State<CashFlowPage> {
       children: [
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(top: 15.0, bottom: 7.5, left: 15.0, right: 15.0),
             child: _buildCashflow(),
           ),
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(top: 7.5, bottom: 15.0, left: 15.0, right: 15.0),
             child: _buildReport(),
           ),
         ),
