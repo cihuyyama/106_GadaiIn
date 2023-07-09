@@ -21,7 +21,8 @@ class _CashFlowPageState extends State<CashFlowPage> {
   late Future<QuerySnapshot<Map<String, dynamic>>> subUser;
   int lunasQty = 0;
   int belumQty = 0;
-  double balance = currentUser!.balance;
+  double? profit;
+
 
   Map<String, double> monthlyData = {};
 
@@ -56,10 +57,12 @@ class _CashFlowPageState extends State<CashFlowPage> {
     snapshot.docs.forEach((doc) {
       final statusGadai = doc.get('statusGadai') as String;
       final jumlahGadai = doc.get('jumlahGadai') as double? ?? 0.0;
+      final bunga = doc.get('bunga') as double? ?? 0.0;
 
       if (statusGadai == 'Lunas') {
         monthlyData['Lunas'] = (monthlyData['Lunas'] ?? 0.0) + jumlahGadai;
         lunasQty += 1;
+        profit = jumlahGadai*(bunga/100);
       } else {
         monthlyData['Belum Lunas'] = (monthlyData['Belum Lunas'] ?? 0.0) + jumlahGadai;
         belumQty += 1;
@@ -112,6 +115,10 @@ class _CashFlowPageState extends State<CashFlowPage> {
         ListTile(
           title: Text('Belum Lunas'),
           subtitle: Text('Total Data: $belumQty'),
+        ),
+        ListTile(
+          title: Text('Profit'),
+          subtitle: Text('Total Profit: Rp.$profit'),
         ),
       ],
     ),
