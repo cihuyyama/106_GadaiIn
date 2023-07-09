@@ -132,6 +132,7 @@ class _AddGadaiState extends State<AddGadai> {
                   borderRadius: BorderRadius.circular(10),
                   icon: const Icon(Icons.arrow_drop_down_circle_rounded),
                   // value: _statusGadaiController.text,
+                  hint: Text('Status'),
                   items: [
                     DropdownMenuItem(
                       value: 'Lunas',

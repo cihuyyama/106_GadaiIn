@@ -8,6 +8,7 @@ import 'home_page.dart';
 final GoogleSignInAccount? gUser = googleSignIn.currentUser;
 final CollectionReference user =
     FirebaseFirestore.instance.collection('gadai');
+final Future<DocumentSnapshot<Map<String, dynamic>>> bal = FirebaseFirestore.instance.collection('users').doc(gUser!.id).get();
 
 class CashFlowPage extends StatefulWidget {
   const CashFlowPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _CashFlowPageState extends State<CashFlowPage> {
   late Future<QuerySnapshot<Map<String, dynamic>>> subUser;
   int lunasQty = 0;
   int belumQty = 0;
+  double balance = currentUser!.balance;
 
   Map<String, double> monthlyData = {};
 
@@ -85,7 +87,7 @@ class _CashFlowPageState extends State<CashFlowPage> {
 
         return ListTile(
           title: Text(statusGadai),
-          subtitle: Text('Total Amount: \$${totalAmount.toStringAsFixed(2)}'),
+          subtitle: Text('Total Amount: Rp.${totalAmount.toStringAsFixed(2)}'),
         );
       },
     ),

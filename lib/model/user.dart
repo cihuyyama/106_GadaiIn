@@ -5,16 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class User {
   final String id;
-  final String username;
+  final double balance;
   final String email;
-  final String bio;
   final String displayName;
   final String photoUrl;
   User({
     required this.id,
-    required this.username,
+    required this.balance,
     required this.email,
-    required this.bio,
     required this.displayName,
     required this.photoUrl,
   });
@@ -23,9 +21,8 @@ class User {
     return User(
       id: doc['id'],
       email: doc['email'],
-      username: doc['username'],
+      balance: doc['balance'],
       displayName: doc['displayName'],
-      bio: doc['bio'],
       photoUrl: doc['photoUrl']
     );
   }
@@ -34,7 +31,7 @@ class User {
 
   User copyWith({
     String? id,
-    String? username,
+    double? balance,
     String? email,
     String? bio,
     String? displayName,
@@ -42,9 +39,8 @@ class User {
   }) {
     return User(
       id: id ?? this.id,
-      username: username ?? this.username,
+      balance: balance ?? this.balance,
       email: email ?? this.email,
-      bio: bio ?? this.bio,
       displayName: displayName ?? this.displayName,
       photoUrl: photoUrl ?? this.photoUrl,
     );
@@ -53,9 +49,8 @@ class User {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'username': username,
+      'balance': balance,
       'email': email,
-      'bio': bio,
       'displayName': displayName,
       'photoUrl': photoUrl,
     };
@@ -64,9 +59,8 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'] as String,
-      username: map['username'] as String,
+      balance: map['balance'] as double,
       email: map['email'] as String,
-      bio: map['bio'] as String,
       displayName: map['displayName'] as String,
       photoUrl: map['photoUrl'] as String,
     );
@@ -79,7 +73,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, username: $username, email: $email, bio: $bio, displayName: $displayName, photoUrl: $photoUrl)';
+    return 'User(id: $id, balance: $balance, email: $email, displayName: $displayName, photoUrl: $photoUrl)';
   }
 
   @override
@@ -88,9 +82,8 @@ class User {
   
     return 
       other.id == id &&
-      other.username == username &&
+      other.balance == balance &&
       other.email == email &&
-      other.bio == bio &&
       other.displayName == displayName &&
       other.photoUrl == photoUrl;
   }
@@ -98,9 +91,8 @@ class User {
   @override
   int get hashCode {
     return id.hashCode ^
-      username.hashCode ^
+      balance.hashCode ^
       email.hashCode ^
-      bio.hashCode ^
       displayName.hashCode ^
       photoUrl.hashCode;
   }

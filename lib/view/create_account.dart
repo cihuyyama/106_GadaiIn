@@ -13,67 +13,55 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final scaffoldkey = GlobalKey<ScaffoldMessengerState>();
   final formkey = GlobalKey<FormState>();
-  String? username;
+  double? balance;
 
   void submit() {
     final form = formkey.currentState;
 
     if (form!.validate()) {
       form.save();
-      SnackBar snackBar = SnackBar(content: Text("Welcome $username"));
-      scaffoldkey.currentState?.showSnackBar(snackBar);
       Timer(
         Duration(seconds: 2),
         () {
-          Navigator.pop(context, username);
+          Navigator.pop(context, balance);
         },
       );
-      setState(() {
-        
-      });
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText: "Set up your Username", removeBackbutton: true),
+      appBar: header(context,
+          titleText: "Set up your Balance", removeBackbutton: true),
       body: ListView(
         children: <Widget>[
           Container(
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: 25.0),
-                  child: Center(
-                    child: Text(
-                      "Create Username",
-                      style: TextStyle(fontSize: 25.0),
-                    ),
-                  ),
-                ),
-                Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Container(
                     child: Form(
                       key: formkey,
-                      // autovalidateMode: AutovalidateMode.always,
                       child: TextFormField(
                         validator: (value) {
-                          if (value!.trim().length < 3 || value.isEmpty) {
-                            return "Username too short";
-                          } else if (value.trim().length > 12) {
-                            return "Username too long";
-                          } else {
-                            return null;
+                          if (value!.isEmpty) {
+                            return 'Please enter a balance';
                           }
+                          if (double.tryParse(value) == null) {
+                            return 'Invalid balance value';
+                          }
+                          return null;
                         },
-                        onSaved: (val) => username = val,
+                        onSaved: (val) => balance = double.parse(val!),
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username",
-                            labelStyle: TextStyle(fontSize: 15.0),
-                            hintText: "min 3 character"),
+                          border: OutlineInputBorder(),
+                          labelText: "Balance",
+                          labelStyle: TextStyle(fontSize: 15.0),
+                          hintText: "Add balance first",
+                        ),
                       ),
                     ),
                   ),

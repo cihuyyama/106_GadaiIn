@@ -13,9 +13,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-final String photoUrl = googleSignIn.currentUser!.photoUrl as String;
-final String name = googleSignIn.currentUser!.displayName as String;
-final String email = googleSignIn.currentUser!.email as String;
   
   PageController pageController = PageController();
   @override
@@ -30,15 +27,15 @@ final String email = googleSignIn.currentUser!.email as String;
             SizedBox(height: 10,),
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(photoUrl)
+              backgroundImage: NetworkImage(currentUser!.photoUrl)
             ),
             SizedBox(height: 10,),
             Text(
-              'Nama : ' + name,
+              'Nama : ' + currentUser!.displayName,
             ),
             SizedBox(height: 10,),
             Text(
-              'Email : ' + email,
+              'Email : ' + currentUser!.email,
             ),
           ],
         ),

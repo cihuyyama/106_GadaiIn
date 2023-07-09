@@ -41,6 +41,9 @@ class _DashboardState extends State<Dashboard> {
 
   clearSearch() {
     searchController.clear();
+    setState(() {
+      
+    });
   }
 
   AppBar buildSearchfiled() {
@@ -192,7 +195,7 @@ class Result extends StatelessWidget {
         return Text(
           "Lunas",
           style: TextStyle(
-            color: Colors.blue
+            color: Colors.green.shade600
           ),
         );
       } else {
@@ -205,51 +208,48 @@ class Result extends StatelessWidget {
       }
     }
 
-    return Form(
-      key: formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: GestureDetector(
-          child: Card(
-            elevation: 5,
-            child: ListTile(
-              title: Text("Nama : $penggadai \nBarang : $barang"),
-              leading: istatus(),
-              subtitle: Text("Tempo : $tempo"),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      print(user.docId);
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdateGadai(
-                          docId: user.docId,
-                          namaPenggadai: user.namaPenggadai,
-                          nik: user.nik,
-                          bunga: user.bunga,
-                          jatuhTempo: user.jatuhTempo!.toDate(),
-                          jumlahGadai: user.jumlahGadai,
-                          namaBarang: user.namaBarang,
-                          statusGadai: user.statusGadai,
-                        ),
-                      ));
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      gadaiController.delTransacdoc(user.docId);
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: GestureDetector(
+        child: Card(
+          elevation: 5,
+          child: ListTile(
+            title: Text("Nama : $penggadai \nBarang : $barang"),
+            leading: istatus(),
+            subtitle: Text("Tempo : $tempo"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    print(user.docId);
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UpdateGadai(
+                        docId: user.docId,
+                        namaPenggadai: user.namaPenggadai,
+                        nik: user.nik,
+                        bunga: user.bunga,
+                        jatuhTempo: user.jatuhTempo!.toDate(),
+                        jumlahGadai: user.jumlahGadai,
+                        namaBarang: user.namaBarang,
+                        statusGadai: user.statusGadai,
+                      ),
+                    ));
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    gadaiController.delTransacdoc(user.docId);
     
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('data Deleted')));
-                    },
-                  ),
-                ],
-              ),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('data Deleted')));
+                  },
+                ),
+              ],
             ),
           ),
         ),

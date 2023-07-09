@@ -186,7 +186,7 @@ class Result extends StatelessWidget {
                         child: FittedBox(
                             fit: BoxFit.contain,
                             child: Text(
-                              user.username,
+                              user.displayName,
                               style: TextStyle(color: Colors.grey[600]),
                             )),
                       ),

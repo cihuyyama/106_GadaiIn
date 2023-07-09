@@ -7,6 +7,7 @@ import 'package:gadain/model/user.dart' as usermod;
 
 import '../view/create_account.dart';
 
+
 class AuthController {
   void createUserInFirestore(context) async {
     //check if exist
@@ -14,17 +15,16 @@ class AuthController {
     DocumentSnapshot doc = await usersRef.doc(user?.id).get();
 
     if (!doc.exists) {
-      final username = await Navigator.push(
+      final balance = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CreateAccount(),
           ));
       usersRef.doc(user!.id).set({
         "id": user.id,
-        "username": username,
+        "balance": balance,
         "email": user.email,
         "displayName": user.displayName,
-        "bio": "",
         "timestamp": timestamp,
         "photoUrl": user.photoUrl
       });
