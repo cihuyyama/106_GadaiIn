@@ -103,7 +103,7 @@ class GadaiController {
       });
     } else if (statusGadai == 'Lunas') {
       usersRef.doc(gUser!.id).update({
-        'balance': currentBalance + jumlahGadai,
+        'balance': currentBalance + jumlahGadai + (jumlahGadai*(bunga/100.0)),
       });
     }
   }
